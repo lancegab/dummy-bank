@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Profile | Dummy Bank</title>
+        <link rel="stylesheet" href="/static/stylesheets/main.css">
+    </head>
+
+    <body>
+        <p>{{ messages.statusMessage }}</p>
+
+        <h1>{{ user.email }}</h1>
+        <a href="/signout">Sign Out</a>
+
+        <form action="/transfer" method="post">
+    			<div>
+    				<label for="recipient">Transfer To</label>
+    				<input type="text" name="recipient" id="recipient">
+    			</div>
+    			<div>
+    				<label for="amount">Transfer Amount</label>
+    				<input type="number" name="amount" id="amount">
+    			</div>
+
+            <button>Transfer</button>
+        </form>
+
+        <form action="/deposit" method="post">
+          <div>
+            <label for="depositAmount">Deposit Amount</label>
+            <input type="number" name="depositAmount" id="depositAmount">
+          </div>
+
+            <button>Deposit</button>
+        </form>
+
+        <form action="/withdraw" method="post">
+          <div>
+            <label for="withdrawAmount">Withdraw Amount</label>
+            <input type="number" name="withdrawAmount" id="withdrawAmount">
+          </div>
+
+            <button>Withdraw</button>
+        </form>
+
+    </body>
+</html>

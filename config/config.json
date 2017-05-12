@@ -1,0 +1,6 @@
+{
+  "development": {
+    "url": "postgres://bankuser:bankpassword@localhost:5432/bankdb",
+    "dialect": "pg"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "dummy-bank",
+  "version": "1.0.0",
+  "description": "dummy bank application using expressjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "body-parser": "^1.17.1",
+    "consolidate": "^0.14.5",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.2",
+    "express-flash": "0.0.2",
+    "express-session": "^1.15.2",
+    "nunjucks": "^3.0.0",
+    "passport": "^0.3.2",
+    "passport-twitter": "^1.0.4",
+    "pg": "^6.1.5",
+    "sequelize": "^3.30.4",
+    "sequelize-cli": "^2.7.0"
+  }
+}

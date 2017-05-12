@@ -1,0 +1,31 @@
+body {
+    background-color: #eee;
+}
+
+
+form {
+    padding: 30px;
+}
+
+
+div {
+    padding: 5px 0;
+}
+
+
+label:not(.remember-me) {
+    display: inline-block;
+    min-width: 150px;
+}
+
+
+input:not([type="checkbox"]) {
+    width: 300px;
+    padding: 0.5em;
+}
+
+
+button {
+    padding: 0.5em 1em;
+    margin-left: 154px;
+}
