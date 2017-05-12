@@ -44,12 +44,13 @@ app.get('/profile', requireSignedIn, function(req, res) {
 	});
 });
 
-app.post('/transfer', requireSignedIn, function(req, res) {
+//transfer
+app.post('/transfer', requireSignedIn, retrieveSignedInUser, function(req, res) {
 	const recipient = req.body.recipient;
 	const amount = parseInt(req.body.amount, 10);
-
-	const email = req.session.currentUser;
-	User.findOne({ where: { email: email } }).then(function(sender) {
+	const sender = req.user;
+//	const email = req.session.currentUser;
+//	User.findOne({ where: { email: email } }).then(function(sender) {
 		User.findOne({ where: { email: recipient } }).then(function(receiver) {
 			Account.findOne({ where: { user_id: sender.id } }).then(function(senderAccount) {
 				Account.findOne({ where: { user_id: receiver.id } }).then(function(receiverAccount) {
@@ -68,7 +69,61 @@ app.post('/transfer', requireSignedIn, function(req, res) {
 				});
 			});
 		});
-	});
+//	});
+});
+
+//deposit
+app.post('/deposit', requireSignedIn, retrieveSignedInUser, function(req, res) {
+	const amount = parseInt(req.body.depositamount, 10);
+	//const email = req.session.currentUser;
+
+	const user = req.user;
+
+	/*	User.findOne({ where: { email: email } }).then(function(user) {
+				Account.findOne({ where: { user_id: user.id } }).then(function(acct) {
+					database.transaction(function(t) {
+						return acct.update({
+							balance: acct.balance + amount
+						}, { transaction: t }).then(function() {
+							req.flash('statusMessage', 'Deposited ' + amount + ' to ' + user.id);
+							res.redirect('/profile');
+					});
+				});
+			});
+		});*/
+
+	//	User.findOne({ where: { email: email } }).then(function(user) {
+				Account.findOne({ where: { user_id: user.id } }).then(function(acct) {
+					database.transaction(function(t) {
+						return acct.update({
+							balance: acct.balance + amount
+						}, { transaction: t }).then(function() {
+							req.flash('statusMessage', 'Deposited ' + amount + ' to ' + user.id);
+							res.redirect('/profile');
+					});
+				});
+			});
+	//	});
+});
+
+//withdraw
+app.post('/withdraw', requireSignedIn, retrieveSignedInUser, function(req, res) {
+	const amount = parseInt(req.body.withdrawamount, 10);
+	const email = req.session.currentUser;
+	const user	= req.user;
+
+//		User.findOne({ where: { email: email } }).then(function(user) {
+				Account.findOne({ where: { user_id: user.id } }).then(function(acct) {
+					database.transaction(function(t) {
+						return acct.update({
+							balance: acct.balance - amount
+						}, { transaction: t }).then(function() {
+							req.flash('statusMessage', 'Withdrawn ' + amount + ' to ' + user.id);
+							res.redirect('/profile');
+					});
+				});
+			});
+//		});
 });
 
 app.get('/auth/twitter', passport.authenticate('twitter'));
@@ -86,6 +141,13 @@ function requireSignedIn(req, res, next) {
     if (!req.session.currentUser) {
         return res.redirect('/');
     }
+    next();
+}
+
+function retrieveSignedInUser(req, res, next) {
+
+		req.user = req.session.user;
+
     next();
 }
 

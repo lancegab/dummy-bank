@@ -1,13 +1,15 @@
 const bcrypt = require('bcrypt');
 const express = require('express');
 const User = require('./models').User;
+const Account= require('./models').Account;
 
 const router = new express.Router();
 
 router.post('/signup', function(req, res) {
-	const email = req.body.email;
+	  const email = req.body.email;
     const password = req.body.password;
     const confirmation = req.body.confirmation;
+		var temp_user_id;
 
 	User.findOne({ where: { email: email } }).then(function(user) {
         if (user !== null) {
@@ -22,6 +24,7 @@ router.post('/signup', function(req, res) {
         const salt = bcrypt.genSaltSync();
         const hashedPassword = bcrypt.hashSync(password, salt);
 
+/*
         User.create({
             email: email,
             password: hashedPassword,
@@ -30,7 +33,32 @@ router.post('/signup', function(req, res) {
             req.flash('signUpMessage', 'Signed up successfully!');
             return res.redirect('/');
         });
+*/
+				User.create({
+						email: email,
+						password: hashedPassword,
+						salt: salt
+				}).then(function(){
+					User.findOne({where: {email:email}}).then(function(temp_user){
+						Account.create({
+								balance: 0,
+								user_id: parseInt(temp_user.id)
+						});
+					});
+				}).then(function() {
+            req.flash('signUpMessage', 'Signed up successfully!');
+            return res.redirect('/');
+        });
+
+
     });
+
+		/*Account.create({
+				balance: 0,
+				user_id: parseInt(temp_user_id)
+		}).then(function() {
+				return res.redirect('/');
+		});*/
 });
 
 router.post('/signin', function(req, res) {
@@ -52,6 +80,8 @@ router.post('/signin', function(req, res) {
 
         req.flash('statusMessage', 'Signed in successfully!');
         req.session.currentUser = user.email;
+				req.session.user = user;
+		//		req.user = user;
 		if (remember) {
 			req.session.cookie.maxAge = 1000 * 60 * 60;
 		}
